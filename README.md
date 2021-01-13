@@ -54,6 +54,8 @@ The boring generator introduces following generators:
 - Install CircleCI: `rails generate boring:ci:circleci:install --repository_name=<name> --ruby_version=<version>`
 - Install GitHub Actions: `rails generate boring:ci:github_action:install --repository_name=<name> --ruby_version=<version>`
 - Install Travis CI: `rails generate boring:ci:travisci:install --ruby_version=<version>`
+- Install CI/CD: `rails generate boring:ci_cd:install`
+- Install Rspec: `rails generate boring:rspec:custom:install`
 - Install Rubocop: `rails generate boring:rubocop:install --ruby_version=<version>`
 - Build Favicon: `rails generate boring:favicon:build --application_name=<application_name> --favico_letter=<favico_letter> --primary_color=<color>`
 - Install Pundit: `rails generate boring:pundit:install`
