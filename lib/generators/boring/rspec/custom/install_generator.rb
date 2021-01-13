@@ -57,30 +57,11 @@ module Boring
         end
 
         def configure_shoulda_matchers
-          shoulda_matchers = <<~EOL.strip
-            # frozen_string_literal: true
-            
-            Shoulda::Matchers.configure do |config|
-              config.integrate do |with|
-                with.test_framework :rspec
-                with.library :rails
-              end
-            end
-          EOL
-
-          create_file "spec/support/shoulda_matchers.rb", shoulda_matchers
+          template("shoulda_matchers.rb", "spec/support/shoulda_matchers.rb")
         end
 
         def configure_factory_bot
-          factory_bot = <<~FACTORYBOT.strip
-            # frozen_string_literal: true
-            
-            require "factory_bot"
-
-            RSpec.configure { |config| config.include FactoryBot::Syntax::Methods }
-          FACTORYBOT
-
-          create_file "spec/support/factory_bot.rb", factory_bot
+          template("factory_bot.rb", "spec/support/factory_bot.rb")
         end
 
         private
