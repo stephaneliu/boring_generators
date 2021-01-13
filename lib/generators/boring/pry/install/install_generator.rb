@@ -6,11 +6,10 @@ module Boring
       desc "Adds pry to the application"
       source_root File.expand_path("templates", __dir__)
 
-      def add_bullet_gem
-        say "Adding Bullet gem", :green
+      def add_pry_gem
+        say "Adding Pry gem", :green
         pry_gem_content = <<~RUBY
           \n
-          # for using pry as Rails console
           gem "pry"
           gem "pry-rails"
         RUBY
