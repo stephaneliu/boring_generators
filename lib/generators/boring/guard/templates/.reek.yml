@@ -1,0 +1,23 @@
+detectors:
+  IrresponsibleModule:
+    enabled: false
+directories:
+  "app/controllers":
+    NestedIterators:
+      max_allowed_nesting: 2
+    UnusedPrivateMethod:
+      enabled: true
+    InstanceVariableAssumption:
+      enabled: true
+  "app/helpers":
+    UtilityFunction:
+      enabled: true
+  "app/mailers":
+    InstanceVariableAssumption:
+      enabled: true
+  "config":
+    UncommunicativeVariableName:
+      enabled: false
+exclude_paths:
+  - node_modules
+  - db/migrate
