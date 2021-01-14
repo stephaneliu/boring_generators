@@ -8,28 +8,34 @@ module Boring
 
       DEFAULT_RUBY_VERSION = "2.7.1"
 
-      class_option :skip_adding_rubocop_rules, type: :boolean, aliases: "-s",
-                                               desc: "Skip adding rubocop rules and add empty file."
-      class_option :ruby_version,              type: :string, aliases: "-v",
-                                               desc: "Tell us the ruby version which you use for the application. Default to Ruby #{DEFAULT_RUBY_VERSION}"
+      class_option :ruby_version,
+                   type: :string,
+                   aliases: "-v",
+                   desc:
+                     "Tell us the ruby version which you use for the application. Default to Ruby #{
+                       DEFAULT_RUBY_VERSION
+                     }"
 
       def add_rubocop_gems
         say "Adding rubocop gems", :green
-        bullet_gem_content = <<~RUBY
-          \n
-          \t# A Ruby static code analyzer, based on the community Ruby style guide
+        rubocop_gem_content = <<~RUBY
+
           \tgem "rubocop",  require: false
           \tgem "rubocop-rails",  require: false
+          \tgem "rubocop-rspec", require: false
           \tgem "rubocop-performance", require: false
         RUBY
-        insert_into_file "Gemfile", bullet_gem_content, after: /group :development do/
-        run "bundle install"
+        insert_into_file "Gemfile", rubocop_gem_content, after: /group :development do/
+
+        # Surround with_unbundled_env to prevent errors when gems are not installed locally
+        # See: https://github.com/Shopify/shopify_app/pull/89
+        Bundler.with_unbundled_env { run "bundle install" }
       end
 
       def add_rails_prefered_rubocop_rules
         say "Adding rubocop style guides", :green
-        @skip_adding_rules = options[:skip_adding_rubocop_rules]
-        @target_ruby_version = options[:ruby_version] ? options[:ruby_version] : DEFAULT_RUBY_VERSION
+        @target_ruby_version =
+          options[:ruby_version] ? options[:ruby_version] : DEFAULT_RUBY_VERSION
         template(".rubocop.yml", ".rubocop.yml")
       end
     end
