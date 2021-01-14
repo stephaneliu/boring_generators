@@ -12,13 +12,28 @@ module Boring
 
         def add_testing_gems
           say "Adding testing gems", :green
-          append_to_file "Gemfile", generate_gem_content
+          integration_gems = <<~RUBY
+            \n
+            group :test do
+              gem "capybara"
+              gem "cuprite"
+            end
+          RUBY
+          append_to_file "Gemfile", integration_gems
 
-          # Surround in this block to prevent errors when gems are not installed locally
+          test_gems = <<~RUBY
+            \n
+            \tgem "factory_bot_rails"
+            \tgem "rspec-rails"
+            \tgem "shoulda-matchers"
+            \tgem "simplecov"
+            \tgem "simplecov-lcov"
+          RUBY
+          insert_into_file "Gemfile", test_gems, after: /group :development, :test do/
+
+          # Surround with_unbundled_env to prevent errors when gems are not installed locally
           # See: https://github.com/Shopify/shopify_app/pull/89
-          Bundler.with_unbundled_env do
-            run "bundle install"
-          end
+          Bundler.with_unbundled_env { run "bundle install" }
         end
 
         def add_boilerplate_file
@@ -65,24 +80,6 @@ module Boring
         end
 
         private
-
-        def generate_gem_content
-          <<~RUBY
-
-            group :test do
-              gem "capybara"
-              gem "cuprite"
-            end
-
-            group :development, :test do
-              gem "factory_bot_rails"
-              gem "rspec-rails"
-              gem "shoulda-matchers"
-              gem "simplecov"
-              gem "simplecov-lcov"
-            end
-          RUBY
-        end
 
         def simplecov_config
           <<~SIMPLECOV
